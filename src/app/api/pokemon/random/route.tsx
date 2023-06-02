@@ -13,6 +13,6 @@ export async function GET() {
 
     } catch (error: any) {
 
-        return NextResponse.json({message: error?.message ?? error ?? 'An error occured' }), {status: 500};
+        return NextResponse.json({message: error?.message ?? error ?? 'An error occured' }, {status: 500});
     }
 }

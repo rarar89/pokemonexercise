@@ -45,15 +45,7 @@ export async function GET(req: Request) {
                 }
             });
     
-            const allTypes: string[] = resultTeams.flatMap(t => t.pokemons.flatMap(p => p.types));
-
-
-            return NextResponse.json({
-                data: resultTeams,
-                filter: {
-                    type: allTypes
-                }
-            });
+            return NextResponse.json(resultTeams);
         }
 
 
