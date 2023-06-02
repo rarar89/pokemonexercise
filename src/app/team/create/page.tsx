@@ -1,13 +1,13 @@
 "use client";
 
-import { DefaultButton } from "@/components/Button/Index";
-import Pokemon from "@/components/Pokemon/Index";
-import { getRndPokemon } from "@/service/getRndPokemon";
-import { saveTeam } from "@/service/saveTeam";
+import { ErrorMessage, SuccessMessage } from "@/components/Message";
+import { TeamEdit } from "@/components/Team";
+import addTeam from "@/service/addTeam";
+import getRndPokemon from "@/service/getRndPokemon";
 import { IPokemon } from "@/types/pokemon";
 import { ITeam } from "@/types/team";
-import { ChangeEventHandler, useEffect, useState } from "react";
-import { useQuery, useMutation, QueryClient } from "react-query";
+import { useEffect, useState } from "react";
+import { useMutation, QueryClient } from "react-query";
 
 export default function Create() {
 
@@ -19,7 +19,7 @@ export default function Create() {
 
     const teamMutation = useMutation({
         mutationFn: (teamData: ITeam) => {
-          return saveTeam(teamData);
+          return addTeam(teamData);
         },
         onSuccess: () => queryClient.invalidateQueries({ queryKey: ['teams'] }),
         onError: (error:any) => {
@@ -33,7 +33,7 @@ export default function Create() {
         },
         onSuccess: (data) => setPokemons([...pokemons, ...[data]]),
         onError: (error:any) => {
-            setError(error.message ?? error ?? 'An Error occured');
+            setError(error.message ?? 'An Error occured');
         }
     });
 
@@ -43,10 +43,9 @@ export default function Create() {
         genPokeMutation.mutate();
     }
 
-    const teamNameHandler = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const teamNameHandler = async (name: string) => {
 
-        e.preventDefault();
-        setTeamName(e.target.value);
+        setTeamName(name);
     }
 
     const saveTeamHandler = async () => {
@@ -70,26 +69,15 @@ export default function Create() {
     const isLoading = genPokeMutation.isLoading || teamMutation.isLoading;
 
     return <div>
-        { teamMutation.isSuccess ? <div className="alert alert-success">Team added!</div> : null }
-        { error ? <div className="alert alert-error">{ error }</div> : null }
-        <div className="form-control w-full max-w-xs p-2">
-            <label className="label">
-                <span className="label-text-alt">Team Name</span>
-            </label>
-            <input type="text" placeholder="Type here" className="input input-bordered w-full max-w-xs" value={teamName} onChange={teamNameHandler} />
-        </div>
-        <div className="form-control w-full max-w-xs p-2">
-            <DefaultButton disabled={isLoading} onClick={addPokemonHandler}>
-                Gotta Catch &apos;Em All
-            </DefaultButton>
-        </div>
-        <div className="flex w-full flex-wrap">
-            { pokemons.map((x, i)=><div className="p-2" key={i}><Pokemon {...x} /></div>) }
-        </div>
-        <div className="form-control w-full max-w-xs p-2">
-            <DefaultButton disabled={isLoading} onClick={saveTeamHandler}>
-                Save Team
-            </DefaultButton>
-        </div>
+        { teamMutation.isSuccess ? <SuccessMessage message={'Team Added! Good Luck!'} /> : null }
+        { error ? <ErrorMessage message={ error } /> : null }
+        <TeamEdit 
+            teamName={teamName}
+            onTeamNameChange={teamNameHandler}
+            onAddPokemon={addPokemonHandler}
+            onSaveTeam={saveTeamHandler}
+            disableButtons={isLoading}
+            pokemons={pokemons}
+        />
     </div>
 }

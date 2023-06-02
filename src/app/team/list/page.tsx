@@ -1,9 +1,9 @@
 "use client";
 
 import { SelectFilter } from "@/components/Filter";
+import { ErrorMessage } from "@/components/Message";
 import Team from "@/components/Team";
-import { getAllPokemons } from "@/service/external/getAllPokemons";
-import { getTeams } from "@/service/getTeams";
+import getTeams from "@/service/getTeams";
 import { ITeam } from "@/types/team";
 import { useEffect, useMemo, useState } from "react";
 import {  useQuery } from "react-query";
@@ -17,10 +17,10 @@ export default function Teams() {
 
     const [filterType, setFilterType] = useState<string>('');
 
-    const { data } = useQuery({
+    const { data, isError } = useQuery({
         queryKey: ['teams'],
         queryFn: ()=>getTeams()
-      })
+    })
 
     const pokemonTypes = useMemo(()=>{
 
@@ -53,11 +53,14 @@ export default function Teams() {
     }
 
     return <div className="w-full justify-center items-center">
-        <SelectFilter
-            name="Pokemon Types Filter:"
-            options={pokemonTypes}
-            onSelect={handleTypesFilter}
-        />
+        {isError ? <ErrorMessage message="An error occured" /> : ''}
+        <div className="p-2">
+            <SelectFilter
+                name="Pokemon Types Filter:"
+                options={pokemonTypes}
+                onSelect={handleTypesFilter}
+            />
+        </div>
         <div className="flex w-full flex-wrap">
             {filteredData?.map((x, i)=><div className="m-2" key={i}><Team {...x} /></div>)}
         </div>

@@ -1,8 +1,8 @@
 import { ITeam } from "../types/team";
 
-const getTeams = async (): Promise<ITeam[]> => {
+const getTeam = async (id: number): Promise<ITeam> => {
 
-    const response = await fetch('/api/team');
+    const response = await fetch(`/api/team/${id}`);
 
     if(!response.ok) {
         
@@ -10,9 +10,9 @@ const getTeams = async (): Promise<ITeam[]> => {
         throw errorData?.message ?? 'an error occured';
     }
     
-    const data = await response.json() as ITeam[];
+    const data = await response.json() as ITeam;
 
     return data;
 }
 
-export default getTeams;
+export default getTeam;

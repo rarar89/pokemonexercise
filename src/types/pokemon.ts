@@ -8,5 +8,6 @@ export interface IPokemon {
     baseExperience: number
     image: string,
     abilities: string[],
-    types: string[]
+    types: string[],
+    teamId?: number 
 }

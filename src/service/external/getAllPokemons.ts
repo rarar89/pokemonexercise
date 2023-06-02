@@ -7,17 +7,16 @@ interface GetPokemonResponse {
     results: PokemonEntry[]
 }
 
-export const getAllPokemons = async () => {
+const getAllPokemons = async () => {
 
     const response = await fetch('https://pokeapi.co/api/v2/pokemon');
 
-    if(!response.ok) {
-        
-        const errorData = await response.json();
-        throw errorData.message;
-    }
+    if(!response.ok)
+        throw 'Failed to retrieve all pokemons';
 
     const data = await response.json() as GetPokemonResponse;
 
     return data.results;
 }
+
+export default getAllPokemons;

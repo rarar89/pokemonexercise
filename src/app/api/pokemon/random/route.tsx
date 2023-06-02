@@ -1,5 +1,5 @@
-import { getAllPokemons } from "@/service/external/getAllPokemons";
-import { getPokemon } from "@/service/external/getPokemon";
+import getAllPokemons from "@/service/external/getAllPokemons";
+import getPokemon from "@/service/external/getPokemon";
 import { NextResponse } from "next/server";
 
 export async function GET() {
@@ -13,6 +13,6 @@ export async function GET() {
 
     } catch (error: any) {
 
-        return NextResponse.json({message: error?.message ?? error ?? 'An error occured' }, {status: 500});
+        return NextResponse.json({message: error?.message ?? 'An error occured' }, {status: 500});
     }
 }

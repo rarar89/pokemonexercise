@@ -1,6 +1,6 @@
 import { IPokemon } from "../types/pokemon";
 
-export const getRndPokemon = async () => {
+const getRndPokemon = async () => {
 
     const response = await fetch('/api/pokemon/random');
 
@@ -12,3 +12,5 @@ export const getRndPokemon = async () => {
 
     return await response.json() as IPokemon;
 }
+
+export default getRndPokemon;

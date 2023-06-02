@@ -1,6 +1,6 @@
 import { ITeam } from "../types/team";
 
-export const saveTeam = async (data: ITeam) => {
+const addTeam = async (data: ITeam) => {
 
     const response = await fetch('/api/team', {method: 'POST', body: JSON.stringify(data)});
 
@@ -12,3 +12,5 @@ export const saveTeam = async (data: ITeam) => {
 
     return true;
 }
+
+export default addTeam;

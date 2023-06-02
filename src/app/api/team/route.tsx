@@ -1,8 +1,6 @@
 import { IPokemon } from "@/types/pokemon";
 import { PrismaClient } from "@prisma/client";
-import { NextApiRequest, NextApiResponse } from "next";
 import { NextResponse } from "next/server";
-
 
 export async function POST(req: Request) {
 
@@ -18,58 +16,27 @@ export async function POST(req: Request) {
         return NextResponse.json(resultCreate);
     } catch(error:any) {
 
-        return NextResponse.json({message: error?.message ?? error ?? 'An error occured' }, { status: 500 });
+        return NextResponse.json({message: error?.message ?? 'An error occured' }, { status: 500 });
     }
 }
 
 export async function GET(req: Request) {
 
-    const { searchParams } = new URL(req.url);
-    const id = searchParams.get('id');
-    
-    try {
-
-        if(id) {
-            const prismaClient = new PrismaClient();
-            const resultTeam = await prismaClient.team.findFirst({where: {id: parseInt(id)}});
-    
-            return NextResponse.json(resultTeam);
-
-
-        } else {
-
-            const prismaClient = new PrismaClient();
-            const resultTeams = await prismaClient.team.findMany({
-                include: {
-                    pokemons: true
-                }
-            });
-    
-            return NextResponse.json(resultTeams);
-        }
-
-
-    } catch(error:any) {
-
-        return NextResponse.json({ message: error?.message ?? error ?? 'An error occured' }, { status: 500 });
-    }
-}
-
-export async function PUT(req: Request) {
-
-    const { searchParams } = new URL(req.url);
-    const id = searchParams.get('id');
-    
-    if(!id) {
-        return NextResponse.json({ message: 'Team id is missing' }, { status: 404 });
-    }
-
     try {
 
         const prismaClient = new PrismaClient();
-        const resultTeams = await prismaClient.team.findMany();
+        const resultTeams = await prismaClient.team.findMany({
+            include: {
+                pokemons: true
+            },
+            orderBy: {
+                createdAt: 'desc'
+            }
+        });
 
         return NextResponse.json(resultTeams);
+        
+
 
     } catch(error:any) {
 

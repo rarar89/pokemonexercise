@@ -1,12 +1,12 @@
 import { IPokemon } from "../../types/pokemon";
 
-export const getPokemon = async (name: string):Promise<IPokemon> => {
+const getPokemon = async (name: string):Promise<IPokemon> => {
 
     const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`);
 
     if(!response.ok)
         throw 'Failed to retrieve all pokemons';
-        
+
         
     const data = await response.json();
 
@@ -18,3 +18,5 @@ export const getPokemon = async (name: string):Promise<IPokemon> => {
         types: data.types.map((t:any)=>t.type.name)
     };
 }
+
+export default getPokemon;
