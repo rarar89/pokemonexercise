@@ -31,11 +31,9 @@ export default function RootLayout({
             </ul>
           </div>
         </div>
-        <div className="hero bg-base-200">
-          <div className="hero-content w-full md:max-w-screen-lg flex-col">
-            <div className="w-full">
+        <div className="bg-base-400 h-screen">
+          <div className="w-full md:max-w-screen-lg p-4">
               {children}
-            </div>
           </div>
         </div>
       </Providers>
