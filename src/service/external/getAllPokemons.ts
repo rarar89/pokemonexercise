@@ -11,8 +11,11 @@ export const getAllPokemons = async () => {
 
     const response = await fetch('https://pokeapi.co/api/v2/pokemon');
 
-    if(!response.ok)
-        throw 'Failed to retrieve all pokemons';
+    if(!response.ok) {
+        
+        const errorData = await response.json();
+        throw errorData.message;
+    }
 
     const data = await response.json() as GetPokemonResponse;
 

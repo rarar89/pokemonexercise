@@ -6,8 +6,7 @@ export const getPokemon = async (name: string):Promise<IPokemon> => {
 
     if(!response.ok)
         throw 'Failed to retrieve all pokemons';
-
-
+        
         
     const data = await response.json();
 
