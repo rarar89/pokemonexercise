@@ -4,14 +4,9 @@ import { SelectFilter } from "@/components/Filter";
 import { ErrorMessage } from "@/components/Message";
 import Team from "@/components/Team";
 import getTeams from "@/service/getTeams";
-import { ITeam } from "@/types/team";
 import { useEffect, useMemo, useState } from "react";
-import {  useQuery } from "react-query";
-
-export async function getStaticProps() {
-    const teams = await getTeams();
-    return { props: { teams } };
-  }
+import { useQuery } from "react-query";
+import { toast } from 'react-toastify';
 
 export default function Teams() {
 
@@ -45,15 +40,25 @@ export default function Teams() {
         return data.filter(item =>
           item.pokemons.some(pokemon => pokemon.types.includes(filterType))
         );
-      }, [data, filterType]);
+    }, [data, filterType]);
 
-    const handleTypesFilter = (pokeType: string) => {
+    const handleTypesFilter = (pokeType: string | null) => {
 
-        setFilterType(pokeType);
+        if(pokeType) {
+            setFilterType(pokeType);
+        } else {
+            setFilterType('');
+        }
+
     }
 
+    useEffect(()=>{
+        if(isError) {
+            toast('An error occured fetching teams!', {type: 'error'});
+        }
+    }, [isError]);
+
     return <div className="w-full justify-center items-center">
-        {isError ? <ErrorMessage message="An error occured" /> : ''}
         <div className="p-2">
             <SelectFilter
                 name="Pokemon Types Filter:"
@@ -61,8 +66,8 @@ export default function Teams() {
                 onSelect={handleTypesFilter}
             />
         </div>
-        <div className="flex w-full flex-wrap">
-            {filteredData?.map((x, i)=><div className="m-2" key={i}><Team {...x} /></div>)}
+        <div className="flex flex-wrap items-stretch">
+            {filteredData?.map((x, i)=><div className="p-2" key={i}><Team {...x} /></div>)}
         </div>
     </div>
 }

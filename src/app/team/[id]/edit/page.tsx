@@ -9,6 +9,7 @@ import { ITeam } from "@/types/team";
 import { useParams, useRouter  } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useMutation, useQuery } from "react-query";
+import { toast } from 'react-toastify'
 
 export default function Page() {
 
@@ -22,9 +23,16 @@ export default function Page() {
         pokemons: []
     });
 
-    const [error, setError] = useState<string>('');
+    const teamMutation = useMutation({
+        mutationFn: () => updateTeam(teamId, teamData),
+        onSuccess: () => {
 
-    const teamMutation = useMutation(() => updateTeam(teamId, teamData));
+            toast('Team updated!', {type: 'success'});
+        },
+        onError: (error:any) => {
+            toast(error.message ?? 'An Error occured', {type: 'error'});
+        }
+    });
 
     const genPokeMutation = useMutation({
         mutationFn: () => {
@@ -34,11 +42,12 @@ export default function Page() {
             
             const teamDataNew = {...teamData};
             teamDataNew.pokemons = [...teamDataNew.pokemons, ...[data]]
-
+            
             setTeamData(teamDataNew);
+            toast(`${data.name} added to team`, {type: 'success'});
         },
         onError: (error:any) => {
-            setError(error.message ?? 'An Error occured');
+            toast(error.message ?? 'An Error occured', {type: 'error'});
         }
     });
 
@@ -59,16 +68,24 @@ export default function Page() {
         setTeamData({...teamData, ...{name: name}});
     }
 
+    const teamUpdateHandler = () => {
+
+        if(teamData.name === '') {
+            toast(`Team name cannot be empty!`, {type: 'info'});
+            return;
+        }
+
+        teamMutation.mutate();
+    }
+
     const isLoading = teamQuery.isLoading || teamMutation.isLoading;
 
     return <div>
-        { teamMutation.isSuccess ? <SuccessMessage message={'Team Updated!'} /> : null }
-        { error ? <ErrorMessage message={ error } /> : null }
         <TeamEdit
             teamName={teamData?.name}
             onTeamNameChange={teamNameHandler}
             onAddPokemon={()=>genPokeMutation.mutate()}
-            onSaveTeam={()=>teamMutation.mutate()}
+            onSaveTeam={teamUpdateHandler}
             disableButtons={isLoading}
             pokemons={teamData.pokemons}
         />

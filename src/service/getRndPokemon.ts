@@ -2,7 +2,7 @@ import { IPokemon } from "../types/pokemon";
 
 const getRndPokemon = async () => {
 
-    const response = await fetch('/api/pokemon/random');
+    const response = await fetch('/api/pokemon/random', {next: {revalidate: 0}});
 
     if(!response.ok) {
         

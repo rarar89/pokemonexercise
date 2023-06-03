@@ -18,7 +18,7 @@ export default function RootLayout({
   return (
     
     <html lang="en">
-      <body className={inter.className}>
+      <body className={inter.className + ' bg-base-400 min-h-screen'}>
       <Providers>
         <div className="navbar bg-base-100">
           <div className="flex-1">
@@ -31,11 +31,9 @@ export default function RootLayout({
             </ul>
           </div>
         </div>
-        <div className="bg-base-400 h-screen">
-          <div className="w-full md:max-w-screen-lg p-4">
+          <div className="w-full p-4">
               {children}
           </div>
-        </div>
       </Providers>
       </body>
     </html>

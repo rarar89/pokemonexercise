@@ -8,13 +8,13 @@ import { IPokemon } from "@/types/pokemon";
 import { ITeam } from "@/types/team";
 import { useEffect, useState } from "react";
 import { useMutation, QueryClient } from "react-query";
+import { toast } from 'react-toastify'
 
 export default function Create() {
 
     const queryClient = new QueryClient();
 
     const [teamName, setTeamName] = useState<string>('');
-    const [error, setError] = useState<string>('');
     const [pokemons, setPokemons] = useState<IPokemon[]>([]);
 
     const teamMutation = useMutation({
@@ -23,7 +23,7 @@ export default function Create() {
         },
         onSuccess: () => queryClient.invalidateQueries({ queryKey: ['teams'] }),
         onError: (error:any) => {
-            setError(error.message ?? error ?? 'An Error occured');
+            toast(error.message ?? error ?? 'An Error occured', {type: 'error'});
         }
     });
 
@@ -31,9 +31,12 @@ export default function Create() {
         mutationFn: () => {
           return getRndPokemon();
         },
-        onSuccess: (data) => setPokemons([...pokemons, ...[data]]),
+        onSuccess: (data) => {
+            toast(`${data.name} added to the team!`, {type: 'success'});
+            setPokemons([...pokemons, ...[data]]);
+        },
         onError: (error:any) => {
-            setError(error.message ?? 'An Error occured');
+            toast(error.message ?? 'An Error occured', {type: 'error'});
         }
     });
 
@@ -50,6 +53,16 @@ export default function Create() {
 
     const saveTeamHandler = async () => {
 
+        if(teamName === '') {
+            toast(`Team name cannot be empty!`, {type: 'info'});
+            return;
+        }
+
+        if(pokemons.length === 0) {
+            toast(`Please add pokemons!`, {type: 'info'});
+            return;
+        }
+
         teamMutation.mutate({
             name: teamName,
             pokemons: pokemons
@@ -59,8 +72,8 @@ export default function Create() {
     useEffect(()=>{
 
         if(teamMutation.isSuccess) {
+            toast('Team Added! Good Luck!', {type: 'success'});
             setTeamName('');
-            setError('');
             setPokemons([]);
         }
 
@@ -69,8 +82,6 @@ export default function Create() {
     const isLoading = genPokeMutation.isLoading || teamMutation.isLoading;
 
     return <div>
-        { teamMutation.isSuccess ? <SuccessMessage message={'Team Added! Good Luck!'} /> : null }
-        { error ? <ErrorMessage message={ error } /> : null }
         <TeamEdit 
             teamName={teamName}
             onTeamNameChange={teamNameHandler}
