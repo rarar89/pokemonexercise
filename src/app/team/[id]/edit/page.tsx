@@ -15,7 +15,7 @@ export default function Page() {
     const params = useParams();
     const router = useRouter();
     
-    const teamId = parseInt(params.id as string);
+    const teamId = parseInt(params?.id as string);
 
     const [teamData, setTeamData] = useState<ITeam>({
         name: '',

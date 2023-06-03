@@ -2,14 +2,17 @@ import { IPokemon } from "@/types/pokemon";
 import { PrismaClient } from "@prisma/client";
 import { NextResponse } from "next/server";
 
+
 export async function POST(req: Request) {
 
     try{
         const prismaClient = new PrismaClient();
         const data = await req.json();
 
-        const pokemons:IPokemon[] = data.pokemons;
+        const filesToFetch:string[] = [];
 
+        const pokemons:IPokemon[] = data.pokemons;
+        
         data.pokemons = {create: pokemons};
         const resultCreate = await prismaClient.team.create({data})
 
@@ -35,11 +38,9 @@ export async function GET(req: Request) {
         });
 
         return NextResponse.json(resultTeams);
-        
-
 
     } catch(error:any) {
 
-        return NextResponse.json({ message: error?.message ?? error ?? 'An error occured' }, { status: 500 });
+        return NextResponse.json({ message: error?.message ?? 'An error occured' }, { status: 500 });
     }
 }

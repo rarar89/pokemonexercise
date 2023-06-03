@@ -9,8 +9,8 @@ import { useEffect, useMemo, useState } from "react";
 import {  useQuery } from "react-query";
 
 export async function getStaticProps() {
-    const teams = await getTeams()
-    return { props: { teams } }
+    const teams = await getTeams();
+    return { props: { teams } };
   }
 
 export default function Teams() {
