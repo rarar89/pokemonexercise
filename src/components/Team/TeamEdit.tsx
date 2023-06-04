@@ -1,4 +1,3 @@
-import { IPokemon } from "@/types/pokemon";
 import { DefaultButton } from "../Button/Index";
 import Pokemon from "../Pokemon/Index";
 import { useMutation } from "react-query";
@@ -46,10 +45,6 @@ export default function TeamEdit(props: TeamEditProps) {
             setTeamData(initialTeamData);
         }
     }, [initialTeamData]);
-
-    useEffect(()=>{
-
-    }, [])
     
     const saveTeamHandler = () => {
 

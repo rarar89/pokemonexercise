@@ -1,7 +1,6 @@
 import fs from 'fs';
 import fetch from 'node-fetch';
 
-
 export const getImageFileName = (url: string) => {
 
   const parts = url.split('/');

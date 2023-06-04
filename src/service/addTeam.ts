@@ -1,4 +1,3 @@
-import Team from "@/components/Team/TeamListEntry";
 import { ITeam } from "../types/team";
 
 const addTeam = async (data: ITeam):Promise<ITeam> => {
