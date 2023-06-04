@@ -1,21 +1,27 @@
-FROM node:18
+FROM node:18 AS base
 
-# Create app directory
+# Specify a working directory in the base image
 WORKDIR /usr/src/app
 
-# Install app dependencies
-# A wildcard is used to ensure both package.json AND package-lock.json are copied
-# where available (npm@5+)
+# Copy package.json and package-lock.json
 COPY package*.json ./
 
+# Install dependencies
 RUN npm install
-# If you are building your code for production
-RUN npm ci --omit=dev
 
-# Bundle app source
+# Copy the rest of the code
 COPY . .
 
+# Build the application
 RUN npm run build
 
-EXPOSE 8080
-CMD [ "node", "start" ]
+RUN npx prisma generate
+
+#RUN npx prisma migrate dev --name init
+
+# Expose the port the app runs in
+EXPOSE 3000
+
+# Command to run the application
+# CMD [ "npm", "start" ]
+CMD /bin/bash -c "npx prisma migrate dev --name init && npm start"
