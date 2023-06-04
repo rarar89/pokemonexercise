@@ -2,7 +2,7 @@ import { ITeam } from "../types/team";
 
 const getTeam = async (id: number): Promise<ITeam> => {
 
-    const response = await fetch(`/api/team/${id}`);
+    const response = await fetch(`${process.env.NEXT_BACKEND_URL ?? ''}/api/team/${id}`);
 
     if(!response.ok) {
         

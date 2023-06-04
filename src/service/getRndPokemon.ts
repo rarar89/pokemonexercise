@@ -1,8 +1,8 @@
 import { IPokemon } from "../types/pokemon";
 
-const getRndPokemon = async () => {
+const getRndPokemon = async ():Promise<IPokemon> => {
 
-    const response = await fetch('/api/pokemon/random', {next: {revalidate: 0}});
+    const response = await fetch(`${process.env.NEXT_BACKEND_URL ?? ''}/api/pokemon/random`, { cache: 'no-store' });
 
     if(!response.ok) {
         

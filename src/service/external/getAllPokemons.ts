@@ -1,13 +1,7 @@
-import { PokemonEntry } from "../../types/pokemon";
+import { GetPokemonResponse } from "@/types/externaApis";
+import { PokemonEntry } from "@/types/pokemon";
 
-interface GetPokemonResponse {
-    data: number,
-    next: string,
-    previous: any,
-    results: PokemonEntry[]
-}
-
-const getAllPokemons = async () => {
+const getAllPokemons = async ():Promise<PokemonEntry[]> => {
 
     const response = await fetch('https://pokeapi.co/api/v2/pokemon');
 

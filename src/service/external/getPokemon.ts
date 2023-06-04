@@ -2,7 +2,7 @@ import { IPokemon } from "../../types/pokemon";
 
 const getPokemon = async (name: string):Promise<IPokemon> => {
 
-    const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`);
+    const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`, { cache: 'no-store' });
 
     if(!response.ok)
         throw 'Failed to retrieve all pokemons';

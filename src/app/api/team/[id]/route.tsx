@@ -1,5 +1,6 @@
 import { IPokemon } from "@/types/pokemon";
 import { PrismaClient } from "@prisma/client";
+import { revalidateTag } from "next/cache";
 import { NextResponse } from "next/server";
 
 export async function GET(req: Request, options: {params: {id: string} }) {
@@ -58,6 +59,8 @@ export async function PUT(req: Request, options: {params: {id: string} }) {
         };
 
         const resultUpdate = await prismaClient.team.update({where: {id: parseInt(id)}, data: data});
+
+        revalidateTag('teams');
 
         return NextResponse.json(resultUpdate);
 

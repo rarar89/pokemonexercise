@@ -1,8 +1,20 @@
-import { ITeam } from "../types/team";
+import { GetTeamsResponse } from "@/types/apis";
 
-const getTeams = async (): Promise<ITeam[]> => {
+const getTeams = async (typeFilter?: string): Promise<GetTeamsResponse> => {
 
-    const response = await fetch('/api/team');
+    let searchString = '';
+    if(typeFilter) {
+        const searchParams = new URLSearchParams({
+            typeFilter: typeFilter
+        })
+        searchString = '?' + searchParams;
+    }
+
+
+    const response = await fetch(
+        `${process.env.NEXT_BACKEND_URL ?? ''}/api/team` + searchString, 
+        { next: { tags: ['teams'] } }
+    );
 
     if(!response.ok) {
         
@@ -10,7 +22,7 @@ const getTeams = async (): Promise<ITeam[]> => {
         throw errorData?.message ?? 'an error occured';
     }
     
-    const data = await response.json() as ITeam[];
+    const data = await response.json() as GetTeamsResponse;
 
     return data;
 }
