@@ -12,10 +12,10 @@ RUN npm install
 # Copy the rest of the code
 COPY . .
 
+RUN npx prisma generate
+
 # Build the application
 RUN npm run build
-
-RUN npx prisma generate
 
 #RUN npx prisma migrate dev --name init
 
