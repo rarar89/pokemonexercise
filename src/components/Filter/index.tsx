@@ -1,3 +1,5 @@
+"use client";
+
 type SelectFilterProps = {
     name: string,
     options: string[],
