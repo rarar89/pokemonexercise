@@ -2,7 +2,7 @@ import { ITeam } from "../types/team";
 
 const updateTeam = async (id: number, data: ITeam):Promise<ITeam> => {
 
-    const response = await fetch(`/api/team/${id}`, {method: 'PUT', body: JSON.stringify(data)});
+    const response = await fetch(`${process.env.NEXT_BACKEND_URL ?? ''}/api/team/${id}`, {method: 'PUT', body: JSON.stringify(data)});
 
     if(!response.ok) {
         
