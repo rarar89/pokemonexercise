@@ -1,4 +1,4 @@
-import { GetPokemonResponse } from "@/types/externaApis";
+import { GetPokemonResponse } from "@/types/externalApis";
 import { PokemonEntry } from "@/types/pokemon";
 
 const getAllPokemons = async ():Promise<PokemonEntry[]> => {
